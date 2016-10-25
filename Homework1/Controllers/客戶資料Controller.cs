@@ -17,7 +17,7 @@ namespace Homework1.Controllers
         // GET: 客戶資料
         public ActionResult Index(string clientName)
         {
-            var data = db.客戶資料.Where(c => c.是否已刪除 == false);
+            var data = db.客戶資料.Where(c => !c.是否已刪除);
             if (!string.IsNullOrEmpty(clientName)) {
                 data = data.Where(c => c.客戶名稱.Contains(clientName));
             }

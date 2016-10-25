@@ -17,9 +17,15 @@ namespace Homework1.Controllers
         // GET: 客戶銀行資訊
         public ActionResult Index(string bankName)
         {
-            var 客戶銀行資訊 = db.客戶銀行資訊
-                .Include(客 => 客.客戶資料)
-                .Where(客銀 => 客銀.是否已刪除 == false);
+            //var 客戶銀行資訊 = db.客戶銀行資訊
+            //    .Include(客 => 客.客戶資料)
+            //    .Where(客銀 => 客銀.是否已刪除 == false);
+
+            var 客戶銀行資訊 =
+                from 客戶 in db.客戶資料
+                join 銀行 in db.客戶銀行資訊 on 客戶.Id equals 銀行.客戶Id
+                where !客戶.是否已刪除 && !銀行.是否已刪除
+                select 銀行;
 
             if (!string.IsNullOrEmpty(bankName)) {
                 客戶銀行資訊 = 客戶銀行資訊.Where(b => b.銀行名稱.Contains(bankName));
