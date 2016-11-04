@@ -209,6 +209,7 @@
     <Compile Include="Models\RepositoryHelper.cs">
       <DependentUpon>IRepository.EF6.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\客聯ViewModel.cs" />
     <Compile Include="Models\vw_ClientInfo.cs">
       <DependentUpon>ClientInfo.tt</DependentUpon>
     </Compile>
@@ -345,6 +346,8 @@
     <Content Include="Views\客戶銀行資訊\Edit.cshtml" />
     <Content Include="Views\客戶銀行資訊\Index.cshtml" />
     <Content Include="Views\客戶資料\ClientInfoList.cshtml" />
+    <Content Include="Views\客戶聯絡人\_ContactList.cshtml" />
+    <Content Include="Views\客戶聯絡人\ContactList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

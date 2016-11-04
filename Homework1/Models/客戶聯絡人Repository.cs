@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Homework1.Models.ViewModels;
 	
 namespace Homework1.Models
 {   
@@ -23,12 +24,35 @@ namespace Homework1.Models
         }
 
         public 客戶聯絡人 Find(int? id) {
-            return this.All().FirstOrDefault(c => c.Id == id);
+            return this.All().FirstOrDefault(c => c.Id == id.Value);
         }
 
         public override void Delete(客戶聯絡人 entity) {
             entity.是否已刪除 = true;
         }
+
+        //public List<客聯ViewModel> GetContactBatchList(int clientId) {
+        //    var contactData = this.Where(c => c.客戶Id == clientId);
+        //    List<客聯ViewModel> data = new List<客聯ViewModel>();
+        //    foreach (var item in contactData) {
+        //        data.Add(
+        //            new 客聯ViewModel { 
+        //                Id = item.Id, 
+        //                職稱=item.職稱, 
+        //                姓名=item.姓名, 
+        //                Email= item.Email, 
+        //                電話=item.電話, 
+        //                手機= item.手機
+        //            });
+        //    }
+        //    return data;
+        //}
+        
+        public IQueryable<客戶聯絡人> GetContactBatchList(int clientId) {
+            var data = this.Where(c => c.客戶Id == clientId && !c.是否已刪除);
+            return data;
+        }
+
     }
 
 	public  interface I客戶聯絡人Repository : IRepository<客戶聯絡人>

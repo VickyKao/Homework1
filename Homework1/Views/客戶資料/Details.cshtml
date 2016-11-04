@@ -80,3 +80,6 @@
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>
+
+<h3>客戶聯絡人</h3>
+@Html.Action("ContactList", "客戶聯絡人", new { clientId = Model.Id })

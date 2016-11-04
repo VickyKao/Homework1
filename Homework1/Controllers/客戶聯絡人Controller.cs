@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Homework1.Models;
+using Homework1.Models.ViewModels;
 
 namespace Homework1.Controllers
 {
@@ -20,6 +21,27 @@ namespace Homework1.Controllers
         {
             var 客戶聯絡人 = 客聯repo.GetQueryData(contactName, contactTitle);
             return View(客戶聯絡人);
+        }
+
+        public ActionResult ContactList(int clientId) {
+            return View(客聯repo.GetContactBatchList(clientId));
+        }
+
+        [HttpPost]
+        public ActionResult ContactBatchUpdate(客聯ViewModel[] items, int? clientId) {
+            if (ModelState.IsValid) {
+                if (items != null && items.Count() > 0) {
+                    foreach (var contact in items) {
+                        var 客戶聯絡人 = 客聯repo.Find(contact.Id);
+                        客戶聯絡人.職稱 = contact.職稱;
+                        客戶聯絡人.手機 = contact.手機;
+                        客戶聯絡人.電話 = contact.電話;
+                    }
+                    客聯repo.UnitOfWork.Commit();
+                }
+            }
+
+            return RedirectToAction("Index", "客戶資料");
         }
 
         // GET: 客戶聯絡人/Details/5
