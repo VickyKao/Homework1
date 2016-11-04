@@ -12,25 +12,14 @@ namespace Homework1.Controllers
 {
     public class 客戶聯絡人Controller : Controller
     {
-        private 客戶資料Entities db = new 客戶資料Entities();
+        客戶資料Repository 客戶repo = RepositoryHelper.Get客戶資料Repository();
+        客戶聯絡人Repository 客聯repo = RepositoryHelper.Get客戶聯絡人Repository();
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string contactName)
+        public ActionResult Index(string contactName, string contactTitle)
         {
-            //var 客戶聯絡人 = db.客戶聯絡人
-            //    .Include(客 => 客.客戶資料)
-            //    .Where(客聯 => !客聯.是否已刪除);
-
-            var 客戶聯絡人 =
-                from 客戶 in db.客戶資料
-                join 客聯 in db.客戶聯絡人 on 客戶.Id equals 客聯.客戶Id
-                where !客戶.是否已刪除 && !客聯.是否已刪除
-                select 客聯;
-        
-            if (!string.IsNullOrEmpty(contactName)) {
-                客戶聯絡人 = 客戶聯絡人.Where(c => c.姓名.Contains(contactName));
-            }
-            return View(客戶聯絡人.ToList());
+            var 客戶聯絡人 = 客聯repo.GetQueryData(contactName, contactTitle);
+            return View(客戶聯絡人);
         }
 
         // GET: 客戶聯絡人/Details/5
@@ -40,7 +29,7 @@ namespace Homework1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = 客聯repo.Find(id);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -51,7 +40,7 @@ namespace Homework1.Controllers
         // GET: 客戶聯絡人/Create
         public ActionResult Create()
         {
-            ViewBag.客戶Id = new SelectList(db.客戶資料.Where(c=>c.是否已刪除 == false), "Id", "客戶名稱");
+            ViewBag.客戶Id = new SelectList(客戶repo.All()  , "Id", "客戶名稱");
             return View();
         }
 
@@ -64,12 +53,12 @@ namespace Homework1.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.客戶聯絡人.Add(客戶聯絡人);
-                db.SaveChanges();
+                客聯repo.Add(客戶聯絡人);
+                客聯repo.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.客戶Id = new SelectList(db.客戶資料.Where(c=>c.是否已刪除 == false) , "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(客戶repo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -80,12 +69,12 @@ namespace Homework1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = 客聯repo.Find(id);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料.Where(c=>c.是否已刪除 == false), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(客戶repo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -98,11 +87,13 @@ namespace Homework1.Controllers
         {
             if (ModelState.IsValid)
             {
+                var db = 客聯repo.UnitOfWork.Context;
                 db.Entry(客戶聯絡人).State = EntityState.Modified;
                 db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
-            ViewBag.客戶Id = new SelectList(db.客戶資料.Where(c=>c.是否已刪除 == false), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
+            ViewBag.客戶Id = new SelectList(客戶repo.All(), "Id", "客戶名稱", 客戶聯絡人.客戶Id);
             return View(客戶聯絡人);
         }
 
@@ -113,7 +104,7 @@ namespace Homework1.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
+            客戶聯絡人 客戶聯絡人 = 客聯repo.Find(id);
             if (客戶聯絡人 == null)
             {
                 return HttpNotFound();
@@ -126,10 +117,10 @@ namespace Homework1.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            客戶聯絡人 客戶聯絡人 = db.客戶聯絡人.Find(id);
-            //db.客戶聯絡人.Remove(客戶聯絡人);
-            客戶聯絡人.是否已刪除 = true;
-            db.SaveChanges();
+            客戶聯絡人 客戶聯絡人 = 客聯repo.Find(id);
+            客聯repo.Delete(客戶聯絡人);
+            客聯repo.UnitOfWork.Commit();
+
             return RedirectToAction("Index");
         }
 
@@ -137,7 +128,7 @@ namespace Homework1.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                客聯repo.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }

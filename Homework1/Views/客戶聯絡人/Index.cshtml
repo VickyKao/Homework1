@@ -11,7 +11,10 @@
 </p>
 <form action="">
     聯絡人姓名 : 
-    <input type="text" name="contactName" value="" />
+    @*<input type="text" name="contactName" value="" />*@
+    @Html.TextBox("contactName")
+    職稱 :
+    @Html.TextBox("contactTitle")
     <input type="submit" value="搜尋" />
 </form>
 <table class="table">
