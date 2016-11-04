@@ -10,32 +10,35 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <form action="">
-    聯絡人姓名 : 
-    @*<input type="text" name="contactName" value="" />*@
-    @Html.TextBox("contactName")
-    職稱 :
-    @Html.TextBox("contactTitle")
+    @Html.TextBox("contactName", null, new { onchange = "this.form.submit();", placeholder = "搜尋聯絡人姓名" })
+    @Html.TextBox("contactTitle", null, new { onchange = "this.form.submit();", placeholder = "搜尋職稱" })
     <input type="submit" value="搜尋" />
 </form>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.職稱)
+            @*@Html.DisplayNameFor(model => model.職稱)*@
+            @Html.ActionLink("職稱", "Index", new { sortOrder = ViewBag.sort職稱 })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.姓名)
+            @*@Html.DisplayNameFor(model => model.姓名)*@
+            @Html.ActionLink("姓名", "Index", new { sortOrder = ViewBag.sort姓名 })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Email)
+            @*@Html.DisplayNameFor(model => model.Email)*@
+            @Html.ActionLink("Email", "Index", new { sortOrder = ViewBag.sortEmail })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.手機)
+            @*@Html.DisplayNameFor(model => model.手機)*@
+            @Html.ActionLink("手機", "Index", new { sortOrder = ViewBag.sort手機 })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.電話)
+            @*@Html.DisplayNameFor(model => model.電話)*@
+            @Html.ActionLink("電話", "Index", new { sortOrder = ViewBag.sort電話 })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.客戶資料.客戶名稱)
+            @*@Html.DisplayNameFor(model => model.客戶資料.客戶名稱)*@
+            @Html.ActionLink("客戶名稱", "Index", new { sortOrder = ViewBag.sort客戶名稱 })
         </th>
         <th></th>
     </tr>

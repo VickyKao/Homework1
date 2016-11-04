@@ -17,9 +17,16 @@ namespace Homework1.Controllers
         客戶聯絡人Repository 客聯repo = RepositoryHelper.Get客戶聯絡人Repository();
 
         // GET: 客戶聯絡人
-        public ActionResult Index(string contactName, string contactTitle)
+        public ActionResult Index(string contactName, string contactTitle, string sortOrder)
         {
-            var 客戶聯絡人 = 客聯repo.GetQueryData(contactName, contactTitle);
+            ViewBag.sort姓名 = string.IsNullOrEmpty(sortOrder) ? "姓名_desc" : "";
+            ViewBag.sort職稱 = sortOrder == "職稱" ? "職稱_desc" : "職稱";
+            ViewBag.sortEmail = sortOrder == "Email" ? "Email_desc" : "Email";
+            ViewBag.sort手機 = sortOrder == "手機" ? "手機_desc" : "手機";
+            ViewBag.sort電話 = sortOrder == "電話" ? "電話_desc" : "電話";
+            ViewBag.sort客戶名稱 = sortOrder == "客戶名稱" ? "客戶名稱_desc" : "客戶名稱";
+
+            var 客戶聯絡人 = 客聯repo.GetQueryData(contactName, contactTitle, sortOrder);
             return View(客戶聯絡人);
         }
 

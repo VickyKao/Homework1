@@ -11,7 +11,7 @@ namespace Homework1.Models
             return base.All().Where(c => !c.是否已刪除);
         }
 
-        public IQueryable<客戶資料> GetQueryData(string clientName, string clientType) {
+        public IQueryable<客戶資料> GetQueryData(string clientName, string clientType, string sort) {
             var data = this.All();
 
             if (!string.IsNullOrEmpty(clientName)) {
@@ -20,6 +20,54 @@ namespace Homework1.Models
             if (!string.IsNullOrEmpty(clientType)) {
                 data = data.Where(c => c.客戶分類 == clientType);
             }
+
+            #region 排序處理
+            switch (sort) {
+                case "客戶名稱_desc":
+                    data = data.OrderByDescending(c => c.客戶名稱);
+                    break;
+                case "統一編號_desc":
+                    data = data.OrderByDescending(c => c.統一編號);
+                    break;
+                case "統一編號":
+                    data = data.OrderBy(c => c.統一編號);
+                    break;
+                case "電話_desc":
+                    data = data.OrderByDescending(c => c.電話);
+                    break;
+                case "電話":
+                    data = data.OrderBy(c => c.電話);
+                    break;
+                case "傳真_desc":
+                    data = data.OrderByDescending(c => c.傳真);
+                    break;
+                case "傳真":
+                    data = data.OrderBy(c => c.傳真);
+                    break;
+                case "地址_desc":
+                    data = data.OrderByDescending(c => c.地址);
+                    break;
+                case "地址":
+                    data = data.OrderBy(c => c.地址);
+                    break;
+                case "Email_desc":
+                    data = data.OrderByDescending(c => c.Email);
+                    break;
+                case "Email":
+                    data = data.OrderBy(c => c.Email);
+                    break;
+                case "客戶分類_desc":
+                    data = data.OrderByDescending(c => c.客戶分類);
+                    break;
+                case "客戶分類":
+                    data = data.OrderBy(c => c.客戶分類);
+                    break;
+                default:
+                    data = data.OrderBy(c => c.客戶名稱);
+                    break;
+            }
+            #endregion
+
             return data;
         }
 

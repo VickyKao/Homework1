@@ -18,20 +18,18 @@ namespace Homework1.Controllers
         vw_ClientInfoRepository ClientInforepo = RepositoryHelper.Getvw_ClientInfoRepository();
 
         // GET: 客戶資料
-        public ActionResult Index(string clientName, string clientType)
-        {
-            //var data = db.客戶資料.Where(c => !c.是否已刪除);
-            var data = 客戶repo.GetQueryData(clientName, clientType);
-            //if (!string.IsNullOrEmpty(clientName)) {
-            //    data = data.Where(c => c.客戶名稱.Contains(clientName));
-            //}
-            //if (!string.IsNullOrEmpty(clientType)) {
-            //    data = data.Where(c => c.客戶分類 == clientType);
-            //}
+        public ActionResult Index(string clientName, string clientType, string sortOrder) {
+            #region 排序欄位
+            ViewBag.sort客戶名稱 = string.IsNullOrEmpty(sortOrder) ? "客戶名稱_desc" : "";
+            ViewBag.sort統一編號 = sortOrder == "統一編號" ? "統一編號_desc" : "統一編號";
+            ViewBag.sort電話 = sortOrder == "電話" ? "電話_desc" : "電話";
+            ViewBag.sort傳真 = sortOrder == "傳真" ? "傳真_desc" : "傳真";
+            ViewBag.sort地址 = sortOrder == "地址" ? "地址_desc" : "地址";
+            ViewBag.sortEmail = sortOrder == "Email" ? "Email_desc" : "Email";
+            ViewBag.sort客戶分類 = sortOrder == "客戶分類" ? "客戶分類_desc" : "客戶分類";
+            #endregion
+            var data = 客戶repo.GetQueryData(clientName, clientType, sortOrder);
 
-            //客戶分類(下拉選項)
-            //string[] type = new string[] { "A", "B", "C", "D", "E"};
-            //string[] type = 客戶repo.Get客戶分類(); 
             List<SelectListItem> type = 客戶repo.Get客戶分類List();
             ViewBag.clientType = type;
 
