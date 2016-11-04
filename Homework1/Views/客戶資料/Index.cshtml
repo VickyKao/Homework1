@@ -14,7 +14,9 @@
 </p>
 <form action="">
     客戶名稱 :
-    <input type="text" name="clientName" value="" />
+    @*<input type="text" name="clientName" value="" />*@
+    @Html.TextBox("clientName")
+    @Html.DropDownList("clientType","--客戶分類--")
     <input type="submit" value="搜尋" />
 </form>
 <table class="table">
