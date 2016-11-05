@@ -2,6 +2,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.IO;
+using System.Data;
+using NPOI.HSSF.UserModel;
+using NPOI.HSSF.Util;
 	
 namespace Homework1.Models
 {   
@@ -90,6 +94,55 @@ namespace Homework1.Models
         public override void Delete(客戶資料 entity) {
             entity.是否已刪除 = true;
             //base.Delete(entity);
+        }
+
+        public MemoryStream ExportExcel(List<客戶資料> exportData, HSSFWorkbook book) {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("客戶名稱", typeof(string));
+            dt.Columns.Add("統一編號", typeof(string));
+            dt.Columns.Add("電話", typeof(string));
+            dt.Columns.Add("傳真", typeof(string));
+            dt.Columns.Add("地址", typeof(string));
+            dt.Columns.Add("Email", typeof(string));
+            dt.Columns.Add("客戶分類", typeof(string));
+            for (int i = 0; i < exportData.Count; i++) {
+                dt.Rows.Add(exportData[i].客戶名稱, exportData[i].統一編號,
+                    exportData[i].電話, exportData[i].傳真,
+                    exportData[i].地址, exportData[i].Email,
+                    exportData[i].客戶分類);
+            }
+            HSSFSheet sheet = (HSSFSheet)book.CreateSheet();
+            HSSFCellStyle headCellStyle = (HSSFCellStyle)book.CreateCellStyle();
+            HSSFCellStyle dataCellStyle = (HSSFCellStyle)book.CreateCellStyle();
+
+            HSSFFont font = (HSSFFont)book.CreateFont();
+            font.FontHeightInPoints = 12;
+            font.FontName = "微軟正黑體";
+            font.Color = HSSFColor.Blue.Index;  //字的顏色
+            headCellStyle.SetFont(font);
+
+            HSSFFont dataFont = (HSSFFont)book.CreateFont();
+            font.FontName = "微軟正黑體";
+            dataCellStyle.SetFont(dataFont);
+
+            var hRow = sheet.CreateRow(0);
+            //表頭
+            for (int h = 0; h < dt.Columns.Count; h++) {
+                HSSFRow r = (HSSFRow)sheet.GetRow(0);
+                r.CreateCell(h).SetCellValue(dt.Columns[h].ColumnName.ToString());
+                r.GetCell(h).CellStyle = headCellStyle;
+            }
+            //表身
+            for (int j = 0; j < dt.Rows.Count; j++) {
+                var dRow = sheet.CreateRow(j + 1);
+                HSSFRow dr = (HSSFRow)sheet.GetRow(j + 1);
+                for (int k = 0; k < dt.Columns.Count; k++) {
+                    dr.CreateCell(k).SetCellValue(dt.Rows[j][k].ToString());
+                }
+            }
+            MemoryStream output = new MemoryStream();
+            book.Write(output);
+            return output;
         }
     }
 

@@ -15,8 +15,11 @@
 <form action="">
     @*<input type="text" name="clientName" value="" />*@
     @Html.TextBox("clientName", null, new { onchange = "this.form.submit();", placeholder = "搜尋客戶名稱" })
-    @Html.DropDownList("clientType","--客戶分類--")
+    @Html.DropDownList("clientType", "--客戶分類--")
     <input type="submit" value="搜尋" />
+    <a href="@Url.Action("ExportByNPOI", "客戶資料")" target="_blank">
+        <img src="~/Content/Excel_48.png" alt="XLS" title="XLS" />
+    </a>
 </form>
 <table class="table">
     <tr>

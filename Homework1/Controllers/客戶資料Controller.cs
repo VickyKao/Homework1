@@ -7,6 +7,8 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Homework1.Models;
+using System.IO;
+using NPOI.HSSF.UserModel;
 
 namespace Homework1.Controllers
 {
@@ -156,6 +158,16 @@ namespace Homework1.Controllers
 
             ViewBag.clientType = 客戶repo.Get客戶分類List();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult ExportByNPOI() {
+            List<客戶資料> exportData = 客戶repo.All().ToList();
+
+            MemoryStream output = new MemoryStream();
+            HSSFWorkbook book = new HSSFWorkbook();
+            output = 客戶repo.ExportExcel(exportData, book);
+
+            return File(output.ToArray(), "application/vnd.ms-excel", "客戶資料.xls");
         }
 
         protected override void Dispose(bool disposing)
